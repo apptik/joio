@@ -43,7 +43,7 @@ public class PrimitiveBench {
     @Benchmark
     @GroupThreads(1)
     @Group("prim")
-    public void dbbNioRead(DbbNioBuffers dbbNioBuffers) throws IOException {
+    public void dbbNioWrite(DbbNioBuffers dbbNioBuffers) throws IOException {
         for (byte b:readBytes){
             dbbNioBuffers.reader.put(b);
         }
@@ -53,7 +53,16 @@ public class PrimitiveBench {
     @Benchmark
     @GroupThreads(1)
     @Group("prim")
-    public void hbbNioRead(HbbNioBuffers hbbNioBuffers) throws IOException {
+    public void dbbNioRead(DbbNioBuffers dbbNioBuffers) throws IOException {
+        for (int i = 0; i < maxWriteBytes; i++)
+            devNullBytes[i] = dbbNioBuffers.writer.get();
+        dbbNioBuffers.writer.rewind();
+    }
+
+    @Benchmark
+    @GroupThreads(1)
+    @Group("prim")
+    public void hbbNioWrite(HbbNioBuffers hbbNioBuffers) throws IOException {
         for (byte b:readBytes){
             hbbNioBuffers.reader.put(b);
         }
@@ -63,7 +72,17 @@ public class PrimitiveBench {
     @Benchmark
     @GroupThreads(1)
     @Group("prim")
-    public void okioRead(OkioBuffers okioBuffers) throws IOException {
+    public void hbbNioRead(HbbNioBuffers hbbNioBuffers) throws IOException {
+        for (int i = 0; i < maxWriteBytes; i++)
+            devNullBytes[i] = hbbNioBuffers.writer.get();
+        hbbNioBuffers.writer.rewind();
+    }
+
+
+    @Benchmark
+    @GroupThreads(1)
+    @Group("prim")
+    public void okioWrite(OkioBuffers okioBuffers) throws IOException {
         for (byte b:readBytes){
             okioBuffers.reader.writeByte(b);
         }
@@ -73,11 +92,30 @@ public class PrimitiveBench {
     @Benchmark
     @GroupThreads(1)
     @Group("prim")
-    public void basIoRead(BasIoBuffers basIoBuffers) throws IOException {
+    public void okioRead(OkioBuffers okioBuffers) throws IOException {
+        Buffer bb = okioBuffers.writer.clone();
+        for (int i = 0; i < maxWriteBytes; i++)
+            devNullBytes[i] = bb.readByte();
+    }
+
+    @Benchmark
+    @GroupThreads(1)
+    @Group("prim")
+    public void basIoWrite(BasIoBuffers basIoBuffers) throws IOException {
         for (byte b:readBytes){
             basIoBuffers.reader.write(b);
         }
         basIoBuffers.reader.reset();
+    }
+
+    @Benchmark
+    @GroupThreads(1)
+    @Group("prim")
+    public void basIoRead(BasIoBuffers basIoBuffers) throws IOException {
+        for (int i = 0; i < maxWriteBytes; i++)
+            devNullBytes[i] = (byte) basIoBuffers.writer.read();
+
+        basIoBuffers.writer.reset();
     }
 
     @State(Scope.Thread)
@@ -152,6 +190,7 @@ public class PrimitiveBench {
         }
 
     }
+
     @State(Scope.Thread)
     public static class BasIoBuffers {
         PrimitiveBench bench;
