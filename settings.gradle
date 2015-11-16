@@ -1,0 +1,4 @@
+rootProject.name = 'joio'
+include 'joio-core'
+include 'perf-test'
+
