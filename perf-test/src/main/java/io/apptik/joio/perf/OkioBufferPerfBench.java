@@ -301,7 +301,7 @@ public class OkioBufferPerfBench {
 
         @Override
         public void write(Buffer source, long byteCount) throws EOFException {
-            source.skip(byteCount);
+            //source.skip(byteCount);
             while (!source.exhausted())
                 source.readByte();
         }

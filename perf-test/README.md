@@ -1,7 +1,7 @@
-Okio Benchmarks
+I/O Benchmarks
 ------------
 
-This module contains microbenchmarks that can be used to measure various aspects of performance for Okio buffers. Okio benchmarks are written using JMH (version 1.4.1 at this time) and require Java 7.
+This module contains microbenchmarks that can be used to measure various aspects of performance for Okio and other buffers. Benchmarks are written using JMH (version 1.11.+ at this time) and require Java 7.
 
 Running Locally
 -------------
