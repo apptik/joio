@@ -287,12 +287,12 @@ public class NioHeapBufferPerfBench {
          * process buffer full.
          */
         protected ByteBuffer receive(byte[] bytes, int maxChunkSize) throws IOException {
-            // writeChunked(received, bytes, maxChunkSize);
+             writeChunked(received, bytes, maxChunkSize);
             //received.wrap(bytes);
-            System.arraycopy(bytes, 0, received.array(), 0, bytes.length);
-            received.limit(bytes.length).position(0);
+            //System.arraycopy(bytes, 0, received.array(), 0, bytes.length);
+            //received.limit(bytes.length).position(0);
 
-            //received.flip();
+            received.flip();
             process.put(received);
             received.rewind();
             return process;
@@ -304,10 +304,10 @@ public class NioHeapBufferPerfBench {
          * sent buffer full.
          */
         protected ByteBuffer transmit(byte[] bytes, int maxChunkSize) throws IOException {
-            //writeChunked(process, bytes, maxChunkSize);
+            writeChunked(process, bytes, maxChunkSize);
             //process.wrap(bytes);
-            System.arraycopy(bytes, 0, process.array(), 0, bytes.length);
-            process.limit(bytes.length).position(0);
+            //System.arraycopy(bytes, 0, process.array(), 0, bytes.length);
+            //process.limit(bytes.length).position(0);
 
             //process.flip();
             sent.put(process);

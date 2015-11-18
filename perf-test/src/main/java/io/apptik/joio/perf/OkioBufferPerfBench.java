@@ -264,8 +264,9 @@ public class OkioBufferPerfBench {
          * process buffer full.
          */
         protected Buffer receive(byte[] bytes, int maxChunkSize) throws IOException {
-            //writeChunked(received, bytes, maxChunkSize)
-                    received.write(bytes).readAll(process);
+            writeChunked(received, bytes, maxChunkSize)
+                    //received.write(bytes)
+                            .readAll(process);
             return process;
         }
 
@@ -275,8 +276,9 @@ public class OkioBufferPerfBench {
          * sent buffer full.
          */
         protected BufferedSource transmit(byte[] bytes, int maxChunkSize) throws IOException {
-            //writeChunked(process, bytes, maxChunkSize)
-            process.write(bytes).readAll(sent);
+            writeChunked(process, bytes, maxChunkSize)
+            //process.write(bytes)
+                    .readAll(sent);
             return sent;
         }
 
