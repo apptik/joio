@@ -36,7 +36,12 @@ public class PrimitiveBench {
 
     byte[] readBytes;
 
-    byte[] devNullBytes;
+    OutputStream devNull =  new OutputStream() {
+        @Override
+        public void write(int b) throws IOException {
+            //gone
+        }
+    };
 
 
 
@@ -55,7 +60,7 @@ public class PrimitiveBench {
     @Group("primRead")
     public void dbbNioRead(DbbNioBuffers dbbNioBuffers) throws IOException {
         for (int i = 0; i < maxWriteBytes; i++)
-            devNullBytes[i] = dbbNioBuffers.writer.get();
+            devNull.write(dbbNioBuffers.writer.get());
         dbbNioBuffers.writer.rewind();
     }
 
@@ -74,7 +79,7 @@ public class PrimitiveBench {
     @Group("primRead")
     public void hbbNioRead(HbbNioBuffers hbbNioBuffers) throws IOException {
         for (int i = 0; i < maxWriteBytes; i++)
-            devNullBytes[i] = hbbNioBuffers.writer.get();
+            devNull.write(hbbNioBuffers.writer.get());
         hbbNioBuffers.writer.rewind();
     }
 
@@ -95,7 +100,7 @@ public class PrimitiveBench {
     public void okioRead(OkioBuffers okioBuffers) throws IOException {
         Buffer bb = okioBuffers.writer.clone();
         for (int i = 0; i < maxWriteBytes; i++)
-            devNullBytes[i] = bb.readByte();
+            devNull.write(bb.readByte());
     }
 
     @Benchmark
@@ -113,7 +118,7 @@ public class PrimitiveBench {
     @Group("primRead")
     public void basIoRead(BasIoBuffers basIoBuffers) throws IOException {
         for (int i = 0; i < maxWriteBytes; i++)
-            devNullBytes[i] = (byte) basIoBuffers.writer.read();
+            devNull.write(basIoBuffers.writer.read());
 
         basIoBuffers.writer.reset();
     }
