@@ -33,5 +33,5 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
     compile "org.openjdk.jmh:jmh-core:1.11.+"
     compile "org.openjdk.jmh:jmh-generator-annprocess:1.11.+"
-    compile "com.squareup.okio:okio:1.6.+"
+    compile "com.squareup.okio:okio:1.9.0"
 }
